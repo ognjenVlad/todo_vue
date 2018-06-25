@@ -77,10 +77,12 @@
             
           });
         },
-        update(name, text) {
-          axios.put(`http://127.0.0.1:8000/api/task/${name}`, { text }).then(() => {
+        update(name, text, priority) {
+          console.log(priority);
+          axios.put(`http://127.0.0.1:8000/api/task/${name}`, {"text":text, "priority":priority }).then(() => {
       
             this.cruds.find(crud => crud.name === name).text = text;
+            this.cruds.find(crud => crud.name === name).priority = priority;
           });
         },
         del(name) {
