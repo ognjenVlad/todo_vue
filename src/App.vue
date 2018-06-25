@@ -11,8 +11,12 @@
       placeholder="What needs to be done?"
       v-model="newText">
       <div>
-            <button @click="store()">Add</button>
+        <p v-if="errors">
+          <b style="color:red">Todo task cant be empty</b>
+        </p>
+        <button @click="store()">Add</button>
       </div>
+      
     </div>
     <div id="app">
         <div class="heading">
@@ -35,10 +39,11 @@
 
 <script>
 
-    function Crud({ priority, text, name}) {
+    function Crud({ priority, text, id, completed}) {
       this.priority = priority;
       this.text = text;
-      this.name = name;
+      this.id = id;
+      this.completed = completed;
     }
     import axios from 'axios';
     
@@ -49,20 +54,26 @@
           newTodo: {},
           newText: null,
           cruds: [],
-          options:[]
+          options:[],
+          errors:false
         }
       },
       methods: {
         store() {
+          if(this.newText==null || this.newText==''){
+            
+            this.errors=true;
+            return;
+          }
           this.newTodo.priority = 0;
-          this.newTodo.name = this.cruds.length;
           this.newTodo.text = this.newText;
      
           console.log(JSON.stringify(this.newTodo));
-          axios.post(`http://127.0.0.1:8000/api/task`, {"name":this.cruds.length,"text":this.newText,
+          axios.post(`http://127.0.0.1:8000/api/task`, {"text":this.newText,
           "priority":0}).then(({ data }) => {
             console.log(data);
             this.cruds.push(new Crud(data["task"]));
+            console.log(this.cruds);
          });
         },
         read() {
@@ -77,17 +88,17 @@
             
           });
         },
-        update(name, text, priority) {
-          console.log(priority);
-          axios.put(`http://127.0.0.1:8000/api/task/${name}`, {"text":text, "priority":priority }).then(() => {
+        update(id, text, priority, completed) {
+          
+          axios.put(`http://127.0.0.1:8000/api/task/${id}`, {"text":text, "priority":priority,"completed":completed }).then(() => {
       
-            this.cruds.find(crud => crud.name === name).text = text;
-            this.cruds.find(crud => crud.name === name).priority = priority;
+            this.cruds.find(crud => crud.id === id).text = text;
+            this.cruds.find(crud => crud.id === id).priority = priority;
           });
         },
-        del(name) {
-          axios.delete(`http://127.0.0.1:8000/api/task/${name}`).then(() => {
-            let index = this.cruds.findIndex(crud => crud.name === name);
+        del(id) {
+          axios.delete(`http://127.0.0.1:8000/api/task/${id}`).then(() => {
+            let index = this.cruds.findIndex(crud => crud.id === id);
             this.cruds.splice(index, 1);
           });
         }
