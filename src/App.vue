@@ -2,7 +2,18 @@
 <style>
   @import './assets/stil.css';
 </style>
+
 <template>
+  <div>
+    <div align="center">
+      <input
+      autofocus autocomplete="off"
+      placeholder="What needs to be done?"
+      v-model="newText">
+      <div>
+            <button @click="store()">Add</button>
+      </div>
+    </div>
     <div id="app">
         <div class="heading">
             <h1>Todo list</h1>
@@ -13,13 +24,13 @@
           v-bind="crud"
           :key="crud.id"
           @delete="del"
+          @update="update"
         >
         </crud>
         </ul>
-        <div>
-            <button @click="create()">Add</button>
-        </div>
+        
     </div>
+  </div>
 </template>
 
 <script>
@@ -35,14 +46,23 @@
     export default {
       data() {
         return {
+          newTodo: {},
+          newText: null,
           cruds: [],
           options:[]
         }
       },
       methods: {
-        create() {
-          axios.get('http://127.0.0.1:8000/api/task/create').then(({ data }) => {
-            this.cruds.push(new Crud(data));
+        store() {
+          this.newTodo.priority = 0;
+          this.newTodo.name = this.cruds.length;
+          this.newTodo.text = this.newText;
+     
+          console.log(JSON.stringify(this.newTodo));
+          axios.post(`http://127.0.0.1:8000/api/task`, {"name":this.cruds.length,"text":this.newText,
+          "priority":0}).then(({ data }) => {
+            console.log(data);
+            this.cruds.push(new Crud(data["task"]));
          });
         },
         read() {
@@ -58,7 +78,7 @@
           });
         },
         update(name, text) {
-          axios.put('http://127.0.0.1:8000/api/task${name}', { text }).then(() => {
+          axios.put(`http://127.0.0.1:8000/api/task/${name}`, { text }).then(() => {
       
             this.cruds.find(crud => crud.name === name).text = text;
           });
