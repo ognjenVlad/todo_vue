@@ -11,10 +11,18 @@
       placeholder="What needs to be done?"
       v-model="newText">
       <div>
-        <p v-if="errors">
-          <b style="color:red">Todo task cant be empty</b>
+        Priority:
+        <select style="margin: 10px;" v-model="priority">
+            <option v-for="option in options" v-bind:key="option">
+              {{ option }}
+            </option>
+        </select>
+        <div>
+          <button style="width:30%" @click="store()">Add task</button>
+        </div>
+      <p v-if="errors">
+          <b style="color:red">Fields cant be empty</b>
         </p>
-        <button @click="store()">Add</button>
       </div>
       
     </div>
@@ -55,22 +63,29 @@
           newText: null,
           cruds: [],
           options:[],
-          errors:false
+          priority:'',
+          errors:false,
+          options: [
+            'low',
+            'medium',
+            'high'
+          ]
         }
       },
       methods: {
         store() {
-          if(this.newText==null || this.newText==''){
+          if(this.newText==null || this.newText=='' || this.priority==''){
             
             this.errors=true;
             return;
+          }else{
+            this.errors=false;
           }
-          this.newTodo.priority = 0;
-          this.newTodo.text = this.newText;
+         
      
           console.log(JSON.stringify(this.newTodo));
           axios.post(`http://127.0.0.1:8000/api/task`, {"text":this.newText,
-          "priority":0}).then(({ data }) => {
+          "priority":this.priority}).then(({ data }) => {
             console.log(data);
             this.cruds.push(new Crud(data["task"]));
             console.log(this.cruds);

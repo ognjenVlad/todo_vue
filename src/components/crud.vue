@@ -14,7 +14,7 @@
       <div>
         <strike v-show="isCompleted">Priority: 
           <label><strike>    {{ priority }}</strike></label>
-        </strike>
+          </strike>
         <div v-show="!isCompleted">Priority: 
           <label>    {{ priority }}</label>
         </div>
@@ -36,8 +36,12 @@
         <input type='text' v-model="changedText" >
       </div>
       Priority:
-      <div style="margin: 10px;"  class='field'>
-        <input type='text' v-model="priorityText" >
+      <div>
+        <select style="margin: 10px;" v-model="priorityText">
+            <option v-for="option in options" v-bind:key="option">
+              {{ option }}
+            </option>
+        </select>
       </div>
       <p  style="margin: 10px;color:red;" v-if="errors">
           <b>Inputs cant be empty</b>
@@ -60,6 +64,11 @@ export default {
         changedText: this.text,
         priorityText: this.priority,
         isCompleted:this.completed,
+        options: [
+            'low',
+            'medium',
+            'high'
+          ]
       };
     },
  
