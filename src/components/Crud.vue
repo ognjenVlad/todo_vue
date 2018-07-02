@@ -5,22 +5,16 @@
         Completed: <input @click="complete" type="checkbox" v-model="isCompleted">
       </p>
       
-      <strike v-show="isCompleted">Task :  
-        <label><strike>{{ text }}</strike> </label>
+      <strike v-show="isCompleted">
+          Task :<label><strike>{{ text }}</strike></label><br/>
+          Priority :<label><strike>{{ priority }}</strike></label>
       </strike>
-      <div v-show="!isCompleted">Task : 
-        <label>{{ text }}</label>
+
+      <div v-show="!isCompleted">
+          Task :<label>{{ text }}</label><br/>
+          Priority :<label>{{ priority }}</label>
       </div>
-      <div>
-        <strike v-show="isCompleted">Priority: 
-          <label>
-            <strike>{{ priority }}</strike>
-          </label>
-        </strike>
-        <div v-show="!isCompleted">Priority: 
-          <label>{{ priority }}</label>
-        </div>
-      </div>
+     
       <div align="right">
         <button @click="del">Delete</button>
         <button v-show="!isCompleted" v-on:click="showForm">Update</button>
@@ -33,7 +27,6 @@
           <label>Task {{id}}</label>
         </div>
         Text:
-        
         <div style="margin: 10px;" class='field'>
           <input type='text' v-model="changedText" >
         </div>
@@ -59,6 +52,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
 		return {
@@ -73,18 +67,17 @@ export default {
         'high'
 			]
 		};
-    },
+  },
  
   methods: {
 
     update (val) {
       if (!this.changedText || !this.priorityText) {
-            
 				this.errors=true;
 				return;
       }
       this.isEditing = false;
-      this.$emit('update', this.id, this.changedText, this.priorityText,this.isCompleted)
+      this.$emit('update', this.id, this.changedText, this.priorityText, this.isCompleted)
     },
 
     del () {
@@ -99,7 +92,6 @@ export default {
       this.isCompleted = !this.isCompleted;
       this.$emit('update', this.id, this.changedText, this.priorityText, this.isCompleted)
     }
-    
   },
 
   props: ['id', 'text', 'priority', 'completed']

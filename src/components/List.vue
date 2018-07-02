@@ -5,7 +5,7 @@
 <template>
   <div >
     <CreateTodo @add="store"></CreateTodo>
-    <div v-if="loggedIn!=='null'" id="app">
+    <div>
       <button align="right" type="button" v-on:click="logout()">Logout</button>
       <div class="heading">
 				<h1>Todo list</h1>
@@ -24,7 +24,6 @@
 </template>
 
 <script>
-
 function Crud({ priority, text, id, completed}) {
   this.priority = priority;
   this.text = text;
@@ -35,16 +34,11 @@ import crud from './Crud.vue';
 import { taskService } from '../js/TaskService.js';
 import { loginService } from '../js/LoginService.js';
 import CreateTodo from './CreateTodo.vue';
+
 export default {
   data () {
     return {
-      newTodo: {},
-      newText: null,
       cruds: [],
-      priority: '',
-      errors: false,
-      loggedIn: localStorage.getItem('token'),
-      
     }
 	},
 	
@@ -63,7 +57,7 @@ export default {
     },
 
     update (id, text, priority, completed) {
-      taskService.updateTask(id,text, priority, completed, this.cruds);
+      taskService.updateTask(id, text, priority, completed, this.cruds);
     },
 
     del (id) {
@@ -72,12 +66,9 @@ export default {
 
     logout () {
       loginService.logout().then(() => {
-        
-        this.loggedIn = 'null';
         this.$router.replace('/login');
       });
     }
-    
   },
 
   components: {
@@ -88,8 +79,8 @@ export default {
     this.read();
   }
 }
-    
 </script>
+
 <style>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

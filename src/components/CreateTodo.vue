@@ -1,5 +1,5 @@
 <template>
-	<div v-if="loggedIn!=='null'" align="center">
+	<div align="center">
 		<input
 			autofocus autocomplete="off"
 			placeholder="What needs to be done?"
@@ -35,10 +35,7 @@ export default {
   data () {
 	  return {
 		  newText: null,
-		  input: {},
 		  priority:'',
-		  errors:false,
-		  loggedIn:localStorage.getItem('token'),
 		  options: [
 			  'low',
 			  'medium',

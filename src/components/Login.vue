@@ -7,12 +7,13 @@
 		<button align="left" type="button" v-on:click="showRegister()">Register</button>
 		<p>
 			<b style="color:red" id="errors"></b>
-    	</p>
+		</p>
 	</div>
 </template>
 
 <script>
 import { loginService } from '../js/LoginService.js';
+
 export default {
 	data () {
 		return {

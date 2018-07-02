@@ -18,16 +18,16 @@ import { loginService } from '../js/LoginService.js';
 
 export default {
   data () {
-      return {
-				input: {},
-      }
+    return {
+      input: {},
+    }
   },
   
   methods: {
 
     register () {
       if( !this.input.username || !this.input.password || !this.input.name ){
-				document.getElementById("errors").innerText = "Fileds cant be empty!"
+				document.getElementById("errors").innerText = "Fileds cant be empty!";
 				return;
       }
       loginService.register(this.input.username, this.input.password, this.input.name)
@@ -35,7 +35,7 @@ export default {
           if (data) {
             this.$router.replace('/');
           } else {
-            document.getElementById("errors").innerText = "Email already taken!"
+            document.getElementById("errors").innerText = "Email already taken!";
           }
         })
     }
