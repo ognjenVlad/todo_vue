@@ -8,34 +8,43 @@
       <p v-if="errors">
           <b style="color:red">Email already taken</b>
         </p>
+        <p v-if="empty">
+          <b style="color:red">Fields cant be empty</b>
+        </p>
     </div>
 
     
 </template>
 <script>
     import axios from 'axios';
+    import service from '../js/RegisterService.js';
     export default {
         data(){
             return {
-                input: {}
-                ,errors:false
+                input: {},
+                errors:false,
+                empty:false
             }
         }
         ,methods:{
             register() {
-                axios.post(`http://127.0.0.1:8000/api/user/register`,{"email":this.input.username
-                ,"password":this.input.password,"name":this.input.name}).then((data) => {
-                    console.log(data);
-                    
-                    localStorage.setItem('token', data['data']['token']);
-                    this.$router.replace('/');
-                }).catch(error => {
-                    console.log(error.response['status']);
-                    if(error.response['status']==422){
-                        console.log(422);
+                if(this.input.username==null || this.input.username === ''|| 
+                this.input.password==null || this.input.password === '' || 
+                this.input.name==null || this.input.name === ''){
+                    this.empty = true;
+                    this.errors = false;
+                    return;
+                }
+                this.empty = false;
+                service.register(this.input.username, this.input.password, this.input.name
+                ).then((data)=>{
+                    if(data){
+                        this.$router.replace('/');
+                    }else{
                         this.errors=true;
                     }
-                });
+                })
+                
                 
             }
         }

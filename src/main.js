@@ -8,8 +8,7 @@ import list from './components/list.vue';
 Vue.config.productionTip = false
 import VueRouter from 'vue-router';
 Vue.use( VueRouter );
-
-
+console.log(localStorage.getItem('token'));
 const routes = [
   { path: '/login', component: login ,
     beforeEnter:(to, from, next)=>{
@@ -24,18 +23,18 @@ const routes = [
   { path: '/register', component: register ,
       beforeEnter:(to, from, next)=>{
         if(localStorage.getItem('token')!=='null'){
-          console.log("AAA");
           next({path: '/'})
           return;
         }
-    console.log("NIJE PROSLO");
     next();
   }},
   { path: '/', component: list , 
     beforeEnter:(to, from, next)=>{
       if(localStorage.getItem('token')==='null'){
+        console.log(localStorage.getItem('token'));
         next({path: '/login'})
       }
+      console.log(localStorage.getItem('token'));
       next();
     }}
 ]

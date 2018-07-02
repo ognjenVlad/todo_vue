@@ -56,8 +56,12 @@
             this.cruds.push(task);
         },
         read() {
-          service.getAll(this.cruds);
-          console.log(this.cruds);
+          service.getAll(this.cruds).then((valid) => {
+            if (!valid){
+              this.$router.replace('/login');
+            }
+          });
+          console.log("GRESKE:" + this.errors);
         },
         update(id, text, priority, completed) {
           service.updateTask(id,text, priority, completed, this.cruds);
@@ -67,7 +71,7 @@
         },
         logout() {
           logService.logout().then(() => {
-            localStorage.setItem('token', null);
+            
             this.loggedIn = 'null';
             this.$router.replace('/login');
           });

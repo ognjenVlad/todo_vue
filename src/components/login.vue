@@ -22,16 +22,13 @@
         },
         methods:{
             login() {
+                this.input.errors = false;
                 service.login(this.input.username, this.input.password)
                 .then((data) => {
-                    if(data.status===401){
-                        return;
-                    }
-                localStorage.setItem('token', data['data']['token']);
-                this.$router.replace('/');
-                }).catch(error => {
-                    if(error.response['status']==401 || error.response['status']==422){
-                        this.errors - true;
+                    if(!data){
+                        this.errors = true;
+                    }else{
+                        this.$router.replace('/');
                     }
                 });
             },

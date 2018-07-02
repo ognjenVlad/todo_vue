@@ -8,7 +8,7 @@ function Crud({ priority, text, id, completed}) {
 function getAll(cruds){
     this.cruds = cruds;
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-    axios.get('http://127.0.0.1:8000/api/task').then(({ data }) => {
+    return axios.get('http://127.0.0.1:8000/api/task').then(({ data }) => {
         var index;
         
         for (index = 0; index < data['tasks'].length; ++index) {
@@ -17,11 +17,13 @@ function getAll(cruds){
         
         }
         console.log(this.cruds);
+        return true;
     
     }).catch(error => {
         console.log(error);
         if(error.response['status']==401 || error.response['status']==422){
-            this.$router.replace('/login');
+            //this.$router.replace('/login');
+            return false;
     }
     });
 }
