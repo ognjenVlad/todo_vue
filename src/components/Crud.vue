@@ -22,12 +22,12 @@
     </li>
  
     <div v-show="isEditing">
-      <div class='ui form'>
-        <div class='field'>
+      <div>
+        <div>
           <label>Task {{id}}</label>
         </div>
         Text:
-        <div style="margin: 10px;" class='field'>
+        <div style="margin: 10px;">
           <input type='text' v-model="changedText" >
         </div>
         Priority:
@@ -41,8 +41,8 @@
         <p style="margin: 10px;color:red;" v-if="errors">
             <b>Inputs cant be empty</b>
         </p>
-        <div style="margin: 10px;"  class='ui two button attached buttons'>
-          <button class='ui basic blue button' @click="update">
+        <div style="margin: 10px;">
+          <button @click="update">
             Update
           </button>
         </div>
