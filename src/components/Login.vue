@@ -24,13 +24,15 @@ export default {
 
 		login () {
 			loginService.login(this.input.username, this.input.password)
-			.then((data) => {
-				if (!data) {
-					document.getElementById("errors").innerText = "Wrong username/password!"
-				} else {
+				.then((data) => {
+					localStorage.setItem('token', data['data']['token']);
 					this.$router.replace('/');
-				}
-			});
+				})
+				.catch(error => {
+					if (error.response['status'] == 401 || error.response['status'] == 422) {
+						document.getElementById("errors").innerText = "Wrong username/password!"
+					}
+				});
 		},
 
 		showRegister () {

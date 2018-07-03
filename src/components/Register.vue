@@ -32,12 +32,14 @@ export default {
       }
       loginService.register(this.input.username, this.input.password, this.input.name)
         .then((data) => {
-          if (data) {
-            this.$router.replace('/');
-          } else {
-            document.getElementById("errors").innerText = "Email already taken!";
-          }
+          localStorage.setItem('token', data['data']['token']);
+          this.$router.replace('/');
         })
+        .catch(error => {
+          if (error.response['status'] == 422) { 
+              document.getElementById("errors").innerText = "Email already taken!";
+          }
+        });
     }
   }
 }
