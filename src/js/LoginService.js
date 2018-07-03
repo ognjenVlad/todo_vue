@@ -8,9 +8,6 @@ export default class LoginService {
 
   logout () {
     return axios.post(`http://127.0.0.1:8000/api/auth/logout`)
-      .then((data) => {
-			  localStorage.setItem('token', null);
-      });
   }
 
   register (username, password, name) {

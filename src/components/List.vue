@@ -78,9 +78,11 @@ export default {
     },
 
     logout () {
-      loginService.logout().then(() => {
-        this.$router.replace('/login');
-      });
+      loginService.logout()
+        .then(() => {
+          localStorage.setItem('token', null);
+          this.$router.replace('/login');
+        });
     }
   },
 
