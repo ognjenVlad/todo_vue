@@ -4,64 +4,77 @@
 
 <template>
   <div >
-    <CreateTodo @add="store"></CreateTodo>
+    <CreateTask @add="store"></CreateTask>
     <div>
       <button align="right" type="button" v-on:click="logout()">Logout</button>
       <div class="heading">
 				<h1>Todo list</h1>
       </div>
       <ul class="list-group">
-        <crud
-          v-for="crud in cruds"
-          v-bind="crud"
-          :key="crud.id"
+        <task
+          v-for="task in tasks"
+          v-bind="task"
+          :key="task.id"
           @delete="del"
           @update="update">
-        </crud>
+        </task>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
-function Crud({ priority, text, id, completed}) {
+function Task({ priority, text, id, completed}) {
   this.priority = priority;
   this.text = text;
   this.id = id;
   this.completed = completed;
 }
-import crud from './Crud.vue';
+import task from './Task.vue';
 import { taskService } from '../js/TaskService.js';
 import { loginService } from '../js/LoginService.js';
-import CreateTodo from './CreateTodo.vue';
+import CreateTask from './CreateTask.vue';
 
 export default {
   data () {
     return {
-      cruds: [],
+      tasks: [],
     }
 	},
 	
   methods: {
 
     store (task) {
-			this.cruds.push(task);
+			this.tasks.push(task);
     },
 
     read () {
-      taskService.getAll(this.cruds).then((valid) => {
-        if (!valid) {
+      taskService.getAll()
+        .then(({ data }) => {
+          var index;
+          for (index = 0; index < data.length; ++index) {
+            this.tasks.push(new Task(data[index]));   
+          }
+        })
+        .catch(error => {
           this.$router.replace('/login');
-        }
-      });
+        }); 
     },
 
     update (id, text, priority, completed) {
-      taskService.updateTask(id, text, priority, completed, this.cruds);
+      taskService.updateTask(id, text, priority, completed)
+        .then(() => {
+          this.tasks.find(task => task.id === id).text = text;
+          this.tasks.find(task => task.id === id).priority = priority;
+      });
     },
 
     del (id) {
-      taskService.delTask(id, this.cruds);
+      taskService.delTask(id)
+        .then(() => {
+          let index = this.tasks.findIndex(task => task.id === id);
+          this.tasks.splice(index, 1);
+      });
     },
 
     logout () {
@@ -72,7 +85,7 @@ export default {
   },
 
   components: {
-    crud, CreateTodo
+    task, CreateTask
   },
 
   created () {
