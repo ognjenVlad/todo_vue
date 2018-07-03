@@ -1,12 +1,5 @@
 import axios from 'axios';
 
-function Crud({ priority, text, id, completed}) {
-  this.priority = priority;
-  this.text = text;
-  this.id = id;
-  this.completed = completed;
-}
-
 export default class TaskService {
   getAll () {
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
